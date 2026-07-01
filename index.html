@@ -246,7 +246,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* ===== КНОПКА ПОПОЛНЕНИЯ ===== */
         .deposit-btn {
             width: 100%;
             max-width: 300px;
@@ -383,7 +382,6 @@
             font-size: 14px;
         }
 
-        /* ===== МОНЕТКА ===== */
         .coin-display {
             margin: 12px auto;
             perspective: 800px;
@@ -590,7 +588,6 @@
             align-items: center;
         }
 
-        /* ===== ПРОФИЛЬ ===== */
         .profile-header {
             text-align: center;
             padding: 8px 0 16px;
@@ -1263,16 +1260,14 @@
     // ============================================================
     function depositStars() {
         if (window.Telegram && Telegram.WebApp) {
-            // Отправляем запрос на пополнение
             Telegram.WebApp.sendData(JSON.stringify({
                 action: 'deposit_stars',
-                amount: 50 // можно сделать выбор суммы
+                amount: 50
             }));
             showToast('⏳ Запрос на пополнение отправлен...');
         } else {
-            // Демо-режим (для теста вне Telegram)
             const amount = 50;
-            balance += amount * 20; // 1 Star = 20 монет
+            balance += amount * 20;
             updateBalanceDisplay();
             showToast('⭐ +50 Stars! (демо)');
             launchConfetti();
@@ -1284,11 +1279,9 @@
     // ============================================================
     try {
         if (window.Telegram && Telegram.WebApp) {
-            // Инициализируем WebApp
             Telegram.WebApp.ready();
             Telegram.WebApp.expand();
             
-            // Обработка входящих данных
             Telegram.WebApp.onEvent('message', function(data) {
                 try {
                     const parsed = JSON.parse(data);
@@ -1305,7 +1298,6 @@
                 }
             });
             
-            // Получаем информацию о пользователе
             const user = Telegram.WebApp.initDataUnsafe.user;
             if (user) {
                 document.getElementById('profileName').textContent = user.first_name || 'Игрок';
