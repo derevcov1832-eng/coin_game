@@ -1,40 +1,54 @@
 const { Telegraf } = require('telegraf');
 
-// ВСТАВЬ СВОЙ ТОКЕН
+// ⚠️ ВСТАВЬ СВОЙ ТОКЕН
 const BOT_TOKEN = '8994617400:AAFtNb76Bhc17zCnMlXzYup-b-IEPi8nuPk';
+
 const bot = new Telegraf(BOT_TOKEN);
 
-// Приветствие
+// ===== ПРИВЕТСТВИЕ =====
 bot.start((ctx) => {
-    ctx.reply('🐰 Добро пожаловать в Rabbits!\nНажми на кнопку ниже, чтобы начать игру.', {
+    ctx.reply('🐰 Добро пожаловать в Rabbits!\n\nНажми на кнопку ниже, чтобы начать игру 🎮', {
         reply_markup: {
             keyboard: [
-                [{ text: '🎮 Играть', web_app: { url: 'https://derevcov1832-eng.github.io/vip-casino/index.html' } }]
+                [{ 
+                    text: '🎮 Играть', 
+                    web_app: { 
+                        url: 'https://derevcov1832-eng.github.io/coin_game/index.html' 
+                    } 
+                }]
             ],
             resize_keyboard: true
         }
     });
 });
 
-// Обработка данных из WebApp (пополнение)
+// ===== ОБРАБОТКА ДАННЫХ ИЗ WebApp =====
 bot.on('web_app_data', async (ctx) => {
     try {
         const data = JSON.parse(ctx.webAppData.data);
-        console.log('📩 Получено:', data);
+        console.log('📩 Получены данные:', data);
 
         if (data.action === 'deposit_stars') {
             const stars = data.amount || 50;
             const coins = stars * 20;
 
-            // TODO: сохранить в БД
-            
-            await ctx.reply(`✅ Пополнено!\n⭐ ${stars} Stars → 🪙 ${coins} монет`);
+            await ctx.reply(
+                `✅ Пополнение успешно!\n` +
+                `⭐ +${stars} Stars\n` +
+                `🪙 +${coins} монет\n\n` +
+                `💰 Твой баланс обновлён!`
+            );
         }
-    } catch (e) {
-        console.error('❌ Ошибка:', e);
+    } catch (error) {
+        console.error('❌ Ошибка:', error);
+        await ctx.reply('❌ Произошла ошибка. Попробуй ещё раз.');
     }
 });
 
-// Запуск
-bot.launch();
-console.log('🤖 Бот запущен!');
+// ===== ЗАПУСК =====
+bot.launch()
+    .then(() => console.log('🤖 Бот успешно запущен!'))
+    .catch((err) => console.error('❌ Ошибка запуска:', err));
+
+process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM'));
