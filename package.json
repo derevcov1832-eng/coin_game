@@ -1,0 +1,12 @@
+{
+  "name": "rabbits-bot",
+  "version": "1.0.0",
+  "description": "Бот для игры Rabbits",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "telegraf": "^4.16.3"
+  }
+}
